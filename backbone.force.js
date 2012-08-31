@@ -6,11 +6,14 @@
  * Time: 4:20 PM
  */
 
-(function () {
-// Hold reference to Underscore.js and Backbone.js in the closure in order
-// to make things work even if they are removed from the global namespace
-    var _ = this._,
-        Backbone = this.Backbone;
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['underscore', 'Backbone'], factory);
+    } else {
+        // Browser globals
+        factory(root._, root.Backbone);
+    }
+}(this, function (_, Backbone) {
 
     var methodMap = {
         'create':'POST',
@@ -180,13 +183,30 @@
         parse:function (resp, xhr) {
             var result = resp;
 
-            if (resp != null && resp.hasOwnProperty('attributes')) {
-                // Checking if type is set, if not using the one from resp
-                if (this.type == null) this.type = resp.attributes.type;
+            if (resp != null) {
                 // Cloning resp
                 result = _.clone(resp);
-                // deleting attributes property
-                delete result.attributes;
+
+                // Renaming id to Id
+                if (result.hasOwnProperty('id')) {
+                    result.Id = result.id;
+                    delete result.id;
+                }
+
+                if (result.hasOwnProperty('attributes')) {
+                    // Checking if type is set, if not using the one from resp
+                    if (this.type == null) this.type = result.attributes.type;
+                    // deleting attributes property
+                    delete result.attributes;
+                }
+
+                // Removing property
+                delete result.success;
+
+                // Removing errors array property
+                if (result.errors && result.errors.length > 0)
+                    delete result.errors;
+
             }
 
             return result;
@@ -261,4 +281,5 @@
         }
     });
 
-})();
+    return Force;
+}));
