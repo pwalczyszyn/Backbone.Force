@@ -84,7 +84,7 @@ myOppsCollection.fetch({
 Executing queries requies defining new Colleciton type with query property set.
 
 ```JavaScript
-var SOQLCollection = Force.Collection.extend({
+var SOQLCollection = Backbone.Force.Collection.extend({
             query:'SELECT Id, Name, ExpectedRevenue, ' +
                     '(SELECT Subject, DurationInMinutes FROM Events), ' +
                     'Account.Id, Account.Name FROM Opportunity WHERE IsWon = TRUE'
