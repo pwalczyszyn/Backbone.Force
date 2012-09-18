@@ -61,10 +61,10 @@ var Opportunity = Backbone.Force.Model.extend({
 
 #### Collection
 
-Fetching defined models, requires defining new collection type with model and query properties set. In this case query property should contain only WHERE soql clause.
+Fetching multiple models requires defining new Collection type with model and query properties set. In this case query property should contain only WHERE soql clause.
 
 ```JavaScript
-var OppsCollection = Force.Collection.extend({
+var OppsCollection = Backbone.Force.Collection.extend({
             model:Opportunity,
             query:'WHERE IsWon = TRUE'
         }),
@@ -81,9 +81,31 @@ myOppsCollection.fetch({
 });
 ```
 
-##### Executing queries
+Executing queries requies defining new Colleciton type with query property set.
 
+```JavaScript
+var SOQLCollection = Force.Collection.extend({
+            query:'SELECT Id, Name, ExpectedRevenue, ' +
+                    '(SELECT Subject, DurationInMinutes FROM Events), ' +
+                    'Account.Id, Account.Name FROM Opportunity WHERE IsWon = TRUE'
+        }),
+        mySOQLCollection = new SOQLCollection();
 
+// Executing query
+mySOQLCollection.fetch({
+    success:function (collection, response) {
+        var accounts = [];
+        collection.each(function (model) {
+            accounts.push(model.get('Account').Name);
+        });
+
+        alert('Found accounts:\n\n' + accounts.join('\n'));
+    },
+    error:function (collection, response) {
+        alert('Executing SOQL query failed!');
+    }
+});
+```
 
 ### Demo
 
