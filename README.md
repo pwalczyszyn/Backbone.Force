@@ -99,6 +99,7 @@ mySOQLCollection.fetch({
     success:function (collection, response) {
         var accounts = [];
         collection.each(function (model) {
+            // Only first level objects are mapped to Backbone.Model types, that is why Account is a standard JS object
             accounts.push(model.get('Account').Name);
         });
 
