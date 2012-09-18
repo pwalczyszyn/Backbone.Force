@@ -2,6 +2,10 @@
 
 Backbone.Force is a plugin for Backbone.js library that enables Force.com connectivity.
 
+### Demo
+
+Demo snippet below will work in Safari browser on desktop or on mobile device using PhoneGap/Cordova and ChildBrowser plugin. It uses yet another project of my that is called forcetk.ui and can be found [here](http://github.com/pwalczyszyn/forcetk.ui).
+
 ```html
 <!DOCTYPE html>
 <html>
