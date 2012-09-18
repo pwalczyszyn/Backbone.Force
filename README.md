@@ -4,9 +4,54 @@
 
 In the back it uses [forcetk](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit) library provided by Salesforce.com team.
 
+## Usage
+
+To initialize it you need to call initialize function and pass it authorized forcetk.Client object:
+
+```JavaScript
+Backbone.Force.initialize(forcetkClient);
+```
+
+Defining Model type:
+
+```JavaScript
+var Opportunity = Backbone.Force.Model.extend({
+    type:'Opportunity'
+});
+```
+
+Fetching Model by Id:
+```JavaScript
+var myOpp = new Opportunity({
+    Id:'OPPORTUNITY_ID'
+});
+
+myOpp.fetch({
+    success:function (model, response) {
+        alert('Fetched opportunity name: ' + model.get('Name'));
+    },
+    error:function (model, response) {
+        alert('Error fetching Opportunity!');
+    }
+});
+```
+
+Updating Model:
+```JavaScript
+myOpp.set('Name', 'New Opp name');
+myOpp.save(null, {
+    success:function (model, response) {
+        alert('Model updated successfully!');
+    },
+    error:function (model, response) {
+        alert('Updating model failed!');
+    }
+});
+```
+
 ### Demo
 
-Snippet below will work in Safari browser on desktop or on mobile device using PhoneGap/Cordova and ChildBrowser plugin. It uses yet another project of my that is called forcetk.ui and can be found [here](http://github.com/pwalczyszyn/forcetk.ui).
+Snippet below will work in Safari browser on desktop or on mobile device using PhoneGap/Cordova and ChildBrowser plugin. It uses yet another project of mine that is called forcetk.ui and can be found [here](http://github.com/pwalczyszyn/forcetk.ui).
 
 ```html
 <!DOCTYPE html>
