@@ -135,7 +135,7 @@ Snippet below will work in Safari browser on desktop or on mobile device using P
             var loginURL = 'https://login.salesforce.com/',
 
             // Consumer Key from Setup | Develop | Remote Access
-                    consumerKey = '3MVG9y6x0357HledFmmKitP_D1Kw1SW0YTpmK_.icZKxZebnHvLydZyWo9dsKWc_zYxeYzAF_RLG1pGtauqA6',
+                    consumerKey = 'CONSUMER_KEY',
 
             // Callback URL from Setup | Develop | Remote Access
                     callbackURL = 'https://login.salesforce.com/services/oauth2/success',
