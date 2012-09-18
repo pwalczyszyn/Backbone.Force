@@ -1,6 +1,8 @@
 ### Description
 
-**Backbone.Force** is a plugin for [Backbone.js](http://backbonejs.org/) library that enables Force.com connectivity. It extends Model and Collection types from Backbone.js
+**Backbone.Force** is a plugin that enables Force.com connectivity to [Backbone.js](http://backbonejs.org/) Model and Collection types.
+
+In the back it uses [forcetk](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit) library provided by Salesforce.com team.
 
 ### Demo
 
