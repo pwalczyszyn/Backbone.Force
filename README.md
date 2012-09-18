@@ -12,6 +12,8 @@ To initialize it you need to call initialize function and pass it authorized for
 Backbone.Force.initialize(forcetkClient);
 ```
 
+#### Model
+
 Defining Model type:
 
 ```JavaScript
@@ -36,7 +38,7 @@ myOpp.fetch({
 });
 ```
 
-Updating Model:
+Updating Model (works exactly the same as Backbone.Model udpates):
 ```JavaScript
 myOpp.set('Name', 'New Opp name');
 myOpp.save(null, {
@@ -48,6 +50,40 @@ myOpp.save(null, {
     }
 });
 ```
+
+Optionally you can define which fields you would like to fetch:
+```JavaScript
+var Opportunity = Backbone.Force.Model.extend({
+    type:'Opportunity',
+    fields:['Name', 'ExpectedRevenue']
+});
+```
+
+#### Collection
+
+Fetching defined models, requires defining new collection type with model and query properties set. In this case query property should contain only WHERE soql clause.
+
+```JavaScript
+var OppsCollection = Force.Collection.extend({
+            model:Opportunity,
+            query:'WHERE IsWon = TRUE'
+        }),
+        myOppsCollection = new OppsCollection();
+
+// Fetching all Opportunities
+myOppsCollection.fetch({
+    success:function (collection, response) {
+        alert('Found: ' + collection.length + ' opps');
+    },
+    error:function (collection, response) {
+        alert('Fetching opportunities failed!');
+    }
+});
+```
+
+##### Executing queries
+
+
 
 ### Demo
 
