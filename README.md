@@ -65,7 +65,9 @@ Fetching multiple models requires defining new Collection type with model and qu
 
 ```JavaScript
 var OppsCollection = Backbone.Force.Collection.extend({
+            // Model type
             model:Opportunity,
+            // WHERE part of SOQL query
             query:'WHERE IsWon = TRUE'
         }),
         myOppsCollection = new OppsCollection();
@@ -85,6 +87,7 @@ Executing queries requies defining new Colleciton type with query property set.
 
 ```JavaScript
 var SOQLCollection = Backbone.Force.Collection.extend({
+            // SOQL query
             query:'SELECT Id, Name, ExpectedRevenue, ' +
                     '(SELECT Subject, DurationInMinutes FROM Events), ' +
                     'Account.Id, Account.Name FROM Opportunity WHERE IsWon = TRUE'
