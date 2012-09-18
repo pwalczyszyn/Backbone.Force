@@ -137,7 +137,7 @@ Snippet below will work in Safari browser on desktop or on mobile device using P
             var loginURL = 'https://login.salesforce.com/',
 
             // Consumer Key from Setup | Develop | Remote Access
-                    consumerKey = 'CONSUMER_KEY',
+                    consumerKey = '3MVG9y6x0357HledFmmKitP_D1Kw1SW0YTpmK_.icZKxZebnHvLydZyWo9dsKWc_zYxeYzAF_RLG1pGtauqA6',
 
             // Callback URL from Setup | Develop | Remote Access
                     callbackURL = 'https://login.salesforce.com/services/oauth2/success',
@@ -150,9 +150,12 @@ Snippet below will work in Safari browser on desktop or on mobile device using P
                                 var Force = Backbone.Force;
                                 Force.initialize(forcetkClient);
 
+                                // ********** Fetching Model **********
+
                                 // Creating Opportunity type that maps to Salesforce Opportunity object
                                 var Opportunity = Force.Model.extend({
-                                            type:'Opportunity'
+                                            type:'Opportunity',
+                                            fields:['Name', 'ExpectedRevenue']
                                         }),
 
                                 // Creating instance of Opportunity type with specified id
@@ -168,7 +171,49 @@ Snippet below will work in Safari browser on desktop or on mobile device using P
                                     error:function (model, response) {
                                         alert('Error fetching Opportunity!');
                                     }
-                                })
+                                });
+
+                                // ********** Fetching Collection of Models **********
+
+                                var OppsCollection = Force.Collection.extend({
+                                            model:Opportunity,
+                                            query:'WHERE IsWon = TRUE'
+                                        }),
+                                        myOppsCollection = new OppsCollection();
+
+                                // Fetching all Opportunities
+                                myOppsCollection.fetch({
+                                    success:function (collection, response) {
+                                        alert('Found: ' + collection.length + ' opps');
+                                    },
+                                    error:function (collection, response) {
+                                        alert('Fetching opportunities failed!');
+                                    }
+                                });
+
+                                // ********** Executing SOQL query **********
+
+                                var SOQLCollection = Force.Collection.extend({
+                                            query:'SELECT Id, Name, ExpectedRevenue, ' +
+                                                    '(SELECT Subject, DurationInMinutes FROM Events), ' +
+                                                    'Account.Id, Account.Name FROM Opportunity WHERE IsWon = TRUE'
+                                        }),
+                                        mySOQLCollection = new SOQLCollection();
+
+                                // Executing query
+                                mySOQLCollection.fetch({
+                                    success:function (collection, response) {
+                                        var accounts = [];
+                                        collection.each(function (model) {
+                                            accounts.push(model.get('Account').Name);
+                                        });
+
+                                        alert('Found accounts:\n\n' + accounts.join('\n'));
+                                    },
+                                    error:function (collection, response) {
+                                        alert('Executing SOQL query failed!');
+                                    }
+                                });
 
                             },
 
