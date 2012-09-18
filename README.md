@@ -231,3 +231,7 @@ Snippet below will work in Safari browser on desktop or on mobile device using P
 </body>
 </html>
 ```
+
+### Examples
+
+- Used in [GapForce](https://github.com/pwalczyszyn/GapForce) project
