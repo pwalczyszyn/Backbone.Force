@@ -1,8 +1,6 @@
 ## Description
 
-**Backbone.Force** is a plugin that enables Force.com connectivity to [Backbone.js](http://backbonejs.org/) Model and Collection types.
-
-In the back it uses [forcetk](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit) library provided by Salesforce.com team.
+**Backbone.Force** is a plugin library that enables Force.com connectivity to [Backbone.js](http://backbonejs.org/) Model and Collection types. In the back it uses [forcetk](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit) library provided by Salesforce.com team.
 
 ## Usage
 
@@ -113,7 +111,7 @@ mySOQLCollection.fetch({
 
 ### Demo
 
-Snippet below will work in Safari browser on desktop or on mobile device using PhoneGap/Cordova and ChildBrowser plugin. It uses yet another project of mine that is called forcetk.ui and can be found [here](http://github.com/pwalczyszyn/forcetk.ui).
+Snippet below will work in Safari browser on desktop or on mobile device using PhoneGap/Cordova and ChildBrowser plugin. It uses yet another project of mine that is called [forcetk.ui](http://github.com/pwalczyszyn/forcetk.ui).
 
 ```html
 <!DOCTYPE html>
@@ -137,7 +135,7 @@ Snippet below will work in Safari browser on desktop or on mobile device using P
             var loginURL = 'https://login.salesforce.com/',
 
             // Consumer Key from Setup | Develop | Remote Access
-                    consumerKey = '3MVG9y6x0357HledFmmKitP_D1Kw1SW0YTpmK_.icZKxZebnHvLydZyWo9dsKWc_zYxeYzAF_RLG1pGtauqA6',
+                    consumerKey = 'CONSUMER_KEY',
 
             // Callback URL from Setup | Develop | Remote Access
                     callbackURL = 'https://login.salesforce.com/services/oauth2/success',
