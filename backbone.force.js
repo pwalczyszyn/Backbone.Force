@@ -44,6 +44,7 @@
 
             var that = this,
                 client = Force.client,
+                url = options.url,
                 error = options.error;
 
             // Extending options with Salesforce specific settings
@@ -53,10 +54,11 @@
                 processData:false,
                 type:methodMap[method],
                 async:client.asyncAjax,
+                url: (client.proxyUrl !== null) ? client.proxyUrl: url,
                 contentType:'application/json',
                 beforeSend:function (xhr) {
                     if (client.proxyUrl !== null) {
-                        xhr.setRequestHeader('SalesforceProxy-Endpoint', options.url);
+                        xhr.setRequestHeader('SalesforceProxy-Endpoint', url);
                     }
                     xhr.setRequestHeader(client.authzHeader, "OAuth " + client.sessionId);
                     xhr.setRequestHeader('X-User-Agent', 'salesforce-toolkit-rest-javascript/' + client.apiVersion);
