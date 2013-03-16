@@ -170,6 +170,17 @@
                 : Backbone.Model.prototype.save.call(this, key, value, options);
         },
 
+        destroy: function(options) {
+            options = options ? _.clone(options) : {};
+
+            // Setting url option
+            _.extend(options, {
+                url:(Force._getServiceURL() + '/sobjects/' + this.type + '/' + (!this.isNew() ? this.id : ''))
+            });
+
+            return Backbone.Model.prototype.destroy.call(this, options);
+        },
+
         set:function (key, value, options) {
             var attrs;
 
