@@ -175,7 +175,7 @@
 
             // Setting url option
             _.extend(options, {
-                url:(Force._getServiceURL() + '/sobjects/' + this.type + '/' + (!this.isNew() ? this.id : ''))
+                url:(Force._getServiceURL() + '/sobjects/' + this.type + '/' + this.id)
             });
 
             return Backbone.Model.prototype.destroy.call(this, options);
