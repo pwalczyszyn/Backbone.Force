@@ -165,7 +165,9 @@
             });
 
             // Calling Backbone's save function
-            return Backbone.Model.prototype.save.call(this, key, value, options);
+            return (_.isObject(key) || key == null) 
+                ? Backbone.Model.prototype.save.call(this, key, options) 
+                : Backbone.Model.prototype.save.call(this, key, value, options);
         },
 
         set:function (key, value, options) {
