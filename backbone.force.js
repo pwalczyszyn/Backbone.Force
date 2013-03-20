@@ -38,7 +38,122 @@
             this.client = forctkClient;
         },
 
-        sync:function (method, model, options) {
+        changesAsJSON: function(model, options) {
+            // Getting updates
+            var changes = _.clone(model.changesToUpdate) || [],
+                updates = _.pick(model.toJSON(), changes);
+
+            // Making sure that Id attribute is not part of an update
+            delete updates.Id;
+
+            // Handling error
+            var error = options.error;
+            options.error = function () {
+
+                // In case of error reverting back changes to update
+                model.changesToUpdate = _.union(model.changesToUpdate, changes);
+
+                // Calling original error function
+                if (error) error.apply(this, Array.prototype.slice.call(arguments));
+
+            };
+
+            // Clearing current changes
+            model.changesToUpdate.length = 0;
+
+            return JSON.stringify(updates);
+        },
+
+        remotetk: {
+            handleResult: function(result, callback, error, nullok) {
+                if (result) {
+                    result = JSON.parse(result);
+                    if ( Array.isArray(result) && result[0].message && result[0].errorCode ) {
+                        if ( typeof error === 'function' ) {
+                            error(result);
+                        }
+                    } else {
+                        callback(result);
+                    }
+                } else if (typeof nullok !== 'undefined' && nullok) {
+                    callback();
+                } else {
+                    error([{ message : "Null return from action method","errorCode":"NULL_RETURN"}]);
+                }        
+            },
+
+            read : function(model, options) {
+                if (typeof model.soql === 'undefined') {
+                    // Retrieve single record
+                    var fields = model.fields ? model.fields.join(',') : null;
+                    RemoteTKController.retrieve(model.type, model.id, fields, function(result){
+                        handleResult(result, function(response){
+                            options.success(response, 'success' /* empty xhr */);
+                        }, function(message){
+                            // TODO - CHECK!!!
+                            options.error(message);
+                        });
+                    }, { 
+                        escape: false
+                    });                    
+                } else {
+                    // Query
+                    var select = options.url.indexOf('q=') + 2;
+                    console.log('soql: ',model.soql);
+                    RemoteTKController.query(model.soql, function(result){
+                        handleResult(result, function(response){
+                            options.success(response, 'success' /* empty xhr */);
+                        }, function(message){
+                            // TODO - CHECK!!!
+                            options.error(message);
+                        });
+                    }, { 
+                        escape: false
+                    });
+                }
+            },
+
+            create : function(model, options) {
+                RemoteTKController.create(model.type, JSON.stringify(model.toJSON()), function(result){
+                    handleResult(result, function(response){
+                            options.success(response, 'success' /* empty xhr */);
+                        }, function(message){
+                            // TODO - CHECK!!!
+                            options.error(message);
+                        });
+                }, { 
+                    escape: false
+                });
+            },
+
+            update : function(model, options) {
+                RemoteTKController.updat(model.type, model.id, Force.changesAsJSON(model, options), function(result){
+                    handleResult(result, function(response){
+                            options.success(response, 'success' /* empty xhr */);
+                        }, function(message){
+                            // TODO - CHECK!!!
+                            options.error(message);
+                        }, true);
+                }, { 
+                    escape: false
+                });
+            },
+
+            delete : function(model, options) {
+                RemoteTKController.del(model.type, model.id, function(result){
+                    handleResult(result, function(response){
+                            options.success(response, 'success' /* empty xhr */);
+                        }, function(message){
+                            // TODO - CHECK!!!
+                            options.error(message);
+                        }, true);
+                }, { 
+                    escape: false
+                });
+            },
+        },
+
+        forcetkSync: function(method, model, options) {
             // Setting options if were not set
             options || (options = {});
 
@@ -78,35 +193,19 @@
             // In case of update it has to follow custom logic because Salesforce uses PATCH method and accepts only
             // changed attributes
             if (method === 'update') {
-
-                // Getting updates
-                var changes = _.clone(model.changesToUpdate) || [],
-                    updates = _.pick(model.toJSON(), changes);
-
-                // Making sure that Id attribute is not part of an update
-                delete updates.Id;
-
-                // Handling error
-                var error = options.error;
-                options.error = function () {
-
-                    // In case of error reverting back changes to update
-                    model.changesToUpdate = _.union(model.changesToUpdate, changes);
-
-                    // Calling original error function
-                    if (error) error.apply(this, Array.prototype.slice.call(arguments));
-
-                };
-
-                // Clearing current changes
-                model.changesToUpdate.length = 0;
-
-                // Setting options data property with updates
-                options.data = JSON.stringify(updates);
+                options.data = Force.changesAsJSON(model, options);
             }
 
             // Calling original sync function
             Backbone.sync(method, model, options)
+        },
+
+        sync: function(method, model, options) {
+            if (typeof RemoteTKController !== 'undefined') {
+                Force.remotetk[method](model, options);
+            } else {
+                Force.forcetkSync(method, model, options);
+            }
         },
 
         _getServiceURL:function () {
@@ -255,7 +354,8 @@
             // Throwing an error if query is null
             if (this.query == null) throw new Error('Force.Collection.query property is required!');
 
-            var query = this.query;
+            // Keep the SOQL query for RemoteTK
+            this.soql = this.query;
 
             // Checking if this is just a WHERE query
             if (this.query.toLowerCase().indexOf('where') == 0) {
@@ -266,14 +366,14 @@
                 if (model.type == null)
                     throw new Error('With WHERE queries Model.type property needs to be set!');
 
-                query = 'SELECT ' + model.fields.join(',') + ' FROM ' + model.type + ' ' + this.query;
+                this.soql = 'SELECT ' + model.fields.join(',') + ' FROM ' + model.type + ' ' + this.query;
             }
 
             // Setting options if it wasn't passed to the function
             options = options ? _.clone(options) : {};
 
             // Setting options url property
-            options.url = Force._getServiceURL() + '/query/?q=' + encodeURIComponent(query);
+            options.url = Force._getServiceURL() + '/query/?q=' + encodeURIComponent(this.soql);
 
             if (options.parse === undefined) options.parse = true;
             var collection = this,
