@@ -64,7 +64,7 @@ The second set of samples is styled with Bootstrap, giving a clean minimalist lo
 
 Again, you can add, view, modify and remove Accounts.
 
-![Detail Bootstrap Sample Page](http://developerforce.github.com/Backbone.Force/detail-page.png)
+![Detail Bootstrap Sample Page](http://developerforce.github.com/Backbone.Force-Samples/detail-page.png)
 
 ### BootstrapAccountForceTK.page
 
