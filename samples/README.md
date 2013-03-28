@@ -76,7 +76,7 @@ Simple Account CRUD from Visualforce with ForceTK.
 
 Simple Account CRUD from Visualforce with RemoteTK.
 
-* [SampleAccountBrowser.page](https://github.com/developerforce/Backbone.Force/blob/master/bootstrap/remotetk/SampleAccountBrowser.page) - Visualforce Page
+* [SampleAccountBrowser.page](https://github.com/developerforce/Backbone.Force/blob/master/samples/bootstrap/remotetk/SampleAccountBrowser.page) - Visualforce Page
 
 As with the jQuery Mobile sample above, you will need the [RemoteTK.component](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit/blob/master/RemoteTK.component) and [controller](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit/blob/master/RemoteTKController.cls) from the Force.com JavaScript REST Toolkit.
 
@@ -84,6 +84,6 @@ As with the jQuery Mobile sample above, you will need the [RemoteTK.component](h
 
 Simple Account CRUD from a web page outside Force.com. [Try it out on Heroku](https://backbone-force-samples.herokuapp.com/BootstrapAccountWebApp.html).
 
-* [SampleAccountBrowser.html](https://github.com/developerforce/Backbone.Force/blob/master/samples/SampleAccountBrowser.html) - Visualforce Page
+* [SampleAccountBrowser.html](https://github.com/developerforce/Backbone.Force/blob/master/samples/bootstrap/SampleAccountBrowser.html) - Visualforce Page
 
 As with the jQuery Mobile sample, you will need to run a proxy to work around the same-origin policy.
