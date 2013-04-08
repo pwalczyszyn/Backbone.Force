@@ -21,7 +21,9 @@ The Mobile Pack for Backbone.js supports two deployment options for your HTML5 m
  * `Samples/BackboneBootStrap/nodejs` - for Node.js
  * `Samples/BackboneBootStrap/php` - for PHP
 
-![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-auth.png) ![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-main.png) ![Detail jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-detail.png)
+![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-login.png) ![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-auth.png)
+
+![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-main.png) ![Detail jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-detail.png)
  
 ## Learn More
 
