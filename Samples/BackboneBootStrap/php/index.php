@@ -344,22 +344,12 @@ function getAuthCredentialsError(error) {
         template: _.template($('#contacts-template').html()),
         initialize: function() {
           this.render();
-          this.input = this.$('#new-contact');
           this.model.on('add', this.render, this);
           this.model.on('reset', this.render, this);
         },
         events: {
           'click .new' : 'newContact',
           'change .theme-selector' : 'changeTheme'
-        },
-        createContactOnEnter: function(e){
-          if ( e.which !== 13 || !this.input.val().trim() ) { // ENTER_KEY = 13
-            return;
-          }
-          // Wait for the server response so we have the Id with which to render 
-          // the new Contact
-          this.model.create(this.newAttributes(), {wait: true});
-          this.input.val(''); // clean input box
         },
         renderOne: function(contact){
           var view = new app.ContactView({model: contact});
@@ -370,11 +360,6 @@ function getAuthCredentialsError(error) {
           this.$('#contact-list').empty();
           for (var i = 0, l = this.model.models.length; i < l; i++) {
             this.renderOne(this.model.models[i]);
-          }
-        },
-        newAttributes: function(){
-          return {
-            Name: this.input.val().trim()
           }
         },
         changeTheme: function(event){
