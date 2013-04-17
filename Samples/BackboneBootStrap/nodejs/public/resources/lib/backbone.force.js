@@ -176,7 +176,7 @@
                         xhr.setRequestHeader('SalesforceProxy-Endpoint', url);
                     }
                     xhr.setRequestHeader(client.authzHeader, "OAuth " + client.sessionId);
-                    xhr.setRequestHeader('X-User-Agent', 'salesforce-toolkit-rest-javascript-backbone/' + client.apiVersion);
+                    xhr.setRequestHeader('X-User-Agent', 'salesforce-toolkit-rest-javascript/' + client.apiVersion);
                 },
                 error:function (jqXHR, textStatus, errorThrown) {
                     if (client.refreshToken && jqXHR.status === 401) {
@@ -374,7 +374,9 @@
 
             // Setting options url property
             options.url = Force._getServiceURL() + '/query/?q=' + encodeURIComponent(this.soql);
-
+				
+			console.log(options.url);
+			
             if (options.parse === undefined) options.parse = true;
             var collection = this,
                 success = options.success,

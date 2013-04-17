@@ -1,237 +1,30 @@
-## Description
+# Mobile Pack for Backbone.js
 
-**Backbone.Force** is a plugin library that enables Force.com connectivity to [Backbone.js](http://backbonejs.org/) Model and Collection types. In the back it uses [forcetk](https://github.com/developerforce/Force.com-JavaScript-REST-Toolkit) library provided by Salesforce.com team.
+<p align='center'>
+  <img src="http://res.cloudinary.com/hy4kyit2a/image/upload/v1365281769/ypqq9g8at1y1yqoo8h6g.png"/>
+</p>
 
-## Usage
+***[Backbone.js](http://backbonejs.org/)*** provides a structure for JavaScript-heavy applications by providing **models** with key-value binding and custom events, **collections** with a rich API of enumerable functions, and **views** with declarative event handling, while connecting it all to your existing application over a RESTful JSON interface. This Mobile Pack presents a [single page](http://en.wikipedia.org/wiki/Single-page_application) JavaScript contact management app that demonstrates how to use Backbone with the Force.com REST API to retrieve data from Salesforce from either a Visualforce page or an external mobile web app implemented in PHP or Node.js.
 
-To initialize it you need to call initialize function and pass it authorized forcetk.Client object:
+## Getting Started
 
-```JavaScript
-Backbone.Force.initialize(forcetkClient);
-```
+The Mobile Pack for Backbone.js supports two deployment options for your HTML5 mobile app. 
 
-#### Model
+1. To use the Mobile Pack with a Visualforce page (i.e. host the app on Force.com), follow [this quick start](https://events.developerforce.com/mobile/getting-started/html5#backbone).
+2. To deploy your HTML5 app externally (e.g. on [Heroku](http://www.heroku.com/)) and source data from Salesforce, follow [this quick start](https://events.developerforce.com/mobile/getting-started/html5#backbone-heroku).
+ 
+## What’s included in this Mobile Pack
 
-Defining Model type:
+* `backbone.force.js` - a plugin library, originally written by [Piotr Walczyszyn](https://github.com/pwalczyszyn), but since extended for the Mobile Packs, that enables Force.com connectivity for Backbone's Model and Collection types.
+* `Samples/BackboneVFJQueryMobile` - a Visualforce page and supporting static resources that implements the single page contact management app.
+* `Samples/BackboneBootStrap` - sample mobile web applications that can be deployed outside Force.com; for example, to Heroku. Each serves up the same single page contact management app, but includes a back end implemented for a different web environment:
+ * `Samples/BackboneBootStrap/nodejs` - for Node.js
+ * `Samples/BackboneBootStrap/php` - for PHP
 
-```JavaScript
-var Opportunity = Backbone.Force.Model.extend({
-    type:'Opportunity'
-});
-```
+![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-login.png) ![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-auth.png)
 
-Fetching Model by Id:
-```JavaScript
-var myOpp = new Opportunity({
-    Id:'OPPORTUNITY_ID'
-});
+![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-main.png) ![Detail jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-detail.png)
+ 
+## Learn More
 
-myOpp.fetch({
-    success:function (model, response) {
-        alert('Fetched opportunity name: ' + model.get('Name'));
-    },
-    error:function (model, response) {
-        alert('Error fetching Opportunity!');
-    }
-});
-```
-
-Updating Model (works exactly the same as Backbone.Model udpates):
-```JavaScript
-myOpp.set('Name', 'New Opp name');
-myOpp.save(null, {
-    success:function (model, response) {
-        alert('Model updated successfully!');
-    },
-    error:function (model, response) {
-        alert('Updating model failed!');
-    }
-});
-```
-
-Optionally you can define which fields you would like to fetch:
-```JavaScript
-var Opportunity = Backbone.Force.Model.extend({
-    type:'Opportunity',
-    fields:['Name', 'ExpectedRevenue']
-});
-```
-
-#### Collection
-
-Fetching multiple models requires defining new Collection type with model and query properties set. In this case query property should contain only WHERE soql clause.
-
-```JavaScript
-var OppsCollection = Backbone.Force.Collection.extend({
-            // Model type
-            model:Opportunity,
-            // WHERE part of SOQL query
-            query:'WHERE IsWon = TRUE'
-        }),
-        myOppsCollection = new OppsCollection();
-
-// Fetching all Opportunities
-myOppsCollection.fetch({
-    success:function (collection, response) {
-        alert('Found: ' + collection.length + ' opps');
-    },
-    error:function (collection, response) {
-        alert('Fetching opportunities failed!');
-    }
-});
-```
-
-Executing queries requies defining new Colleciton type with query property set.
-
-```JavaScript
-var SOQLCollection = Backbone.Force.Collection.extend({
-            // SOQL query
-            query:'SELECT Id, Name, ExpectedRevenue, ' +
-                    '(SELECT Subject, DurationInMinutes FROM Events), ' +
-                    'Account.Id, Account.Name FROM Opportunity WHERE IsWon = TRUE'
-        }),
-        mySOQLCollection = new SOQLCollection();
-
-// Executing query
-mySOQLCollection.fetch({
-    success:function (collection, response) {
-        var accounts = [];
-        collection.each(function (model) {
-            // Only first level objects are mapped to Backbone.Model types, that is why Account is a standard JS object
-            accounts.push(model.get('Account').Name);
-        });
-
-        alert('Found accounts:\n\n' + accounts.join('\n'));
-    },
-    error:function (collection, response) {
-        alert('Executing SOQL query failed!');
-    }
-});
-```
-
-### Demo
-
-Snippet below will work in Safari browser on desktop or on mobile device using PhoneGap/Cordova and ChildBrowser plugin. It uses yet another project of mine that is called [forcetk.ui](http://github.com/pwalczyszyn/forcetk.ui).
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>forcetk.ui demo</title>
-
-    <script type="text/javascript" src="scripts/libs/jquery-1.8.1.js"></script>
-
-    <script type="text/javascript" src="scripts/libs/forcetk.js"></script>
-    <script type="text/javascript" src="scripts/libs/forcetk.ui.js"></script>
-
-    <script type="text/javascript" src="scripts/libs/underscore.js"></script>
-    <script type="text/javascript" src="scripts/libs/backbone.js"></script>
-    <script type="text/javascript" src="scripts/libs/backbone.force.js"></script>
-
-    <script type="text/javascript">
-
-        function login() {
-            // Salesforce login URL
-            var loginURL = 'https://login.salesforce.com/',
-
-            // Consumer Key from Setup | Develop | Remote Access
-                    consumerKey = 'CONSUMER_KEY',
-
-            // Callback URL from Setup | Develop | Remote Access
-                    callbackURL = 'https://login.salesforce.com/services/oauth2/success',
-
-            // Instantiating forcetk ClientUI
-                    ftkClientUI = new forcetk.ClientUI(loginURL, consumerKey, callbackURL,
-                            function forceOAuthUI_successHandler(forcetkClient) { // successCallback
-                                console.log('OAuth success!');
-
-                                var Force = Backbone.Force;
-                                Force.initialize(forcetkClient);
-
-                                // ********** Fetching Model **********
-
-                                // Creating Opportunity type that maps to Salesforce Opportunity object
-                                var Opportunity = Force.Model.extend({
-                                            type:'Opportunity',
-                                            fields:['Name', 'ExpectedRevenue']
-                                        }),
-
-                                // Creating instance of Opportunity type with specified id
-                                        myOpp = new Opportunity({
-                                            Id:'006E0000004sgoo'
-                                        });
-
-                                // Fetching opportunity with specified id
-                                myOpp.fetch({
-                                    success:function (model, response) {
-                                        alert('Fetched opportunity name: ' + model.get('Name'));
-                                    },
-                                    error:function (model, response) {
-                                        alert('Error fetching Opportunity!');
-                                    }
-                                });
-
-                                // ********** Fetching Collection of Models **********
-
-                                var OppsCollection = Force.Collection.extend({
-                                            model:Opportunity,
-                                            query:'WHERE IsWon = TRUE'
-                                        }),
-                                        myOppsCollection = new OppsCollection();
-
-                                // Fetching all Opportunities
-                                myOppsCollection.fetch({
-                                    success:function (collection, response) {
-                                        alert('Found: ' + collection.length + ' opps');
-                                    },
-                                    error:function (collection, response) {
-                                        alert('Fetching opportunities failed!');
-                                    }
-                                });
-
-                                // ********** Executing SOQL query **********
-
-                                var SOQLCollection = Force.Collection.extend({
-                                            query:'SELECT Id, Name, ExpectedRevenue, ' +
-                                                    '(SELECT Subject, DurationInMinutes FROM Events), ' +
-                                                    'Account.Id, Account.Name FROM Opportunity WHERE IsWon = TRUE'
-                                        }),
-                                        mySOQLCollection = new SOQLCollection();
-
-                                // Executing query
-                                mySOQLCollection.fetch({
-                                    success:function (collection, response) {
-                                        var accounts = [];
-                                        collection.each(function (model) {
-                                            accounts.push(model.get('Account').Name);
-                                        });
-
-                                        alert('Found accounts:\n\n' + accounts.join('\n'));
-                                    },
-                                    error:function (collection, response) {
-                                        alert('Executing SOQL query failed!');
-                                    }
-                                });
-
-                            },
-
-                            function forceOAuthUI_errorHandler(error) { // errorCallback
-                                alert('OAuth error!');
-                            });
-
-            // Initiating login process
-            ftkClientUI.login();
-        }
-
-    </script>
-
-</head>
-<body onload="login()">
-<h3>Backbone.Force tests</h3>
-</body>
-</html>
-```
-
-### Examples
-
-- Used in [GapForce](https://github.com/pwalczyszyn/GapForce) project
+For much more information building enterprise mobile applications on Force.com with Mobile Packs, go to the [Mobile Packs home page](https://events.developerforce.com/mobile/services/mobile-packs).

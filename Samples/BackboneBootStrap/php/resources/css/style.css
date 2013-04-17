@@ -1,0 +1,78 @@
+#content ul {
+  list-style-type: none; /* Hides bullet points from account list */
+}
+
+footer {
+	clear: both;
+}
+
+.nav-list > li > a:hover {
+  background-color: yellow;
+}
+
+/* Midnight theme */
+.theme-midnight {
+  background-color: black;
+  color: LightGray;
+}
+
+.theme-midnight .form-actions {
+  background-color: DimGrey;	
+  border-top-color: DarkGrey;	
+}
+
+.theme-midnight a {
+  color: SlateGray;	
+}
+
+.theme-midnight input {
+  background-color: DimGrey;	
+  color: black;	
+}
+
+.theme-midnight input:-moz-placeholder,
+.theme-midnight textarea:-moz-placeholder {
+  color: black;	
+}
+
+.theme-midnight input:-ms-input-placeholder,
+.theme-midnight textarea:-ms-input-placeholder {
+  color: black;	
+}
+
+.theme-midnight input::-webkit-input-placeholder,
+.theme-midnight textarea::-webkit-input-placeholder {
+  color: black;	
+}
+
+.theme-midnight .nav-list > li > a:hover {
+  background-color: Gainsboro;
+}
+
+.theme-midnight .btn {
+  color: LightGray;
+  background-color: DarkGrey;	
+  background-image: -moz-linear-gradient(top, DarkGrey, black);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(DarkGrey), to(black));
+  background-image: -webkit-linear-gradient(top, DarkGrey, black);
+  background-image: -o-linear-gradient(top, DarkGrey, black);
+  background-image: linear-gradient(to bottom, DarkGrey, black);
+}
+
+.theme-midnight .btn:hover,
+.theme-midnight .btn:focus,
+.theme-midnight .btn:active,
+.theme-midnight .btn.active,
+.theme-midnight .btn.disabled,
+.theme-midnight .btn[disabled] {
+  color: LightGray;
+  background-color: black;	/* DarkGray; */
+}
+
+.theme-midnight .btn:hover,
+.theme-midnight .btn:focus {
+  color: LightGray;
+}
+
+
+
